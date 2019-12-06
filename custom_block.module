@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function custom_block_theme($existing, $type, $theme, $path)
+{
+    $variables = array(
+        'customblock' => array(
+            'variables' => array(
+                'title_block' => NULL,
+                'body_block' => NULL,
+            ),
+            'template' => 'customblock',
+        ),
+
+
+    );
+    return $variables;
+}
