@@ -4,6 +4,8 @@ namespace Drupal\custom_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+use Drupal\core\Url;
 
 /**
  * Provides a 'Hello' Block.
@@ -22,15 +24,22 @@ class CustomBlock extends BlockBase
      */
     public function build()
     {
-//        return [
-//            '#markup' => 'Hello ' . $this->configuration['title'] . ' !'
-//        ];
         $config = $this->getConfiguration();
-        return array(
+        $fid = $config['image'];
+        if (!empty($fid)) {
+            $file = File::load($fid[0]);
+        }
+        if (!empty($file)) {
+            $url = $file->url();
+        }
 
+
+        return array(
             '#theme' => 'customblock',
             '#title_block' => $config['title'],
             '#body_block' => $config['body'],
+            '#position_title' => $config['position'],
+            '#image_block' => $url,
         );
 
     }
@@ -47,6 +56,17 @@ class CustomBlock extends BlockBase
             '#description' => $this->t('Who do you want to say title block to?'),
             '#default_value' => $this->configuration['title']
         ];
+        $form['position_title'] = array(
+            '#title' => $this->t('Position Title'),
+            '#description' => $this->t('This is position title'),
+            '#type' => 'select',
+            '#options' => array(
+                1 => $this->t('Left'),
+                2 => $this->t('Center'),
+                3 => $this->t('Right'),
+            ),
+            '#default_value' => $this->configuration['position'],
+        );
 
         $form['block_body'] = [
             '#type' => 'textarea',
@@ -56,7 +76,7 @@ class CustomBlock extends BlockBase
         ];
         $form['block_image'] = array(
             '#title' => t('Custom Image'),
-            '#description' => t('This is custom image block drupal 8'),
+            '#description' => $this->t('Chossir Image gif png jpg jpeg'),
             '#type' => 'managed_file',
             '#upload_location' => 'public://custom-image-block/',
             '#upload_validators' => array(
@@ -74,7 +94,8 @@ class CustomBlock extends BlockBase
         return [
             'title' => 'Title',
             'body' => 'description block',
-            'image' => ''
+            'image' => '',
+            'position' => 1
         ];
 
     }
@@ -84,6 +105,7 @@ class CustomBlock extends BlockBase
         $this->configuration['title'] = $form_state->getValue('block_title');
         $this->configuration['body'] = $form_state->getValue('block_body');
         $this->configuration['image'] = $form_state->getValue('block_image');
+        $this->configuration['position'] = $form_state->getValue('position_title');
     }
 
 }

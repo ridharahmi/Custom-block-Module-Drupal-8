@@ -1,4 +1,13 @@
 <section id="custom_block">
-    <h2> {{ title_block }}</h2>
-    <p>{{ body_block }}</p>
+    {% if title_block %}
+        <h2 style="color: red; text-align: {{ position_title }};"> {{ title_block }}</h2>
+    {% endif %}
+
+    {% if image_block %}
+        <img src="{{ image_block }}" alt="{{ 'Custom Image'|t }}" title="{{ 'Custom Image'|t }}" class="img-responsive" />
+    {% endif %}
+
+    {% if body_block %}
+        <p>{{ body_block }}</p>
+    {% endif %}
 </section>
