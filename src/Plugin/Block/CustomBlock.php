@@ -4,7 +4,11 @@ namespace Drupal\custom_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
+use Druap\image\Entity\ImageStyle;
 use Drupal\file\Entity\File;
+use Drupal\Core\Url;
+
+
 
 
 /**
@@ -51,7 +55,8 @@ class CustomBlock extends BlockBase
             '#body_block' => $config['body'],
             '#position_title' => $text_align,
             '#image_block' => $url,
-            '#color_title' => $config['color']
+            '#color_title' => $config['color'],
+            '#link_block' => $config['link']
         );
 
     }
@@ -89,6 +94,7 @@ class CustomBlock extends BlockBase
         $form['block_body'] = [
             '#type' => 'textarea',
             '#title' => $this->t('Custom Body'),
+            '#format' => 'full_html',
             '#description' => $this->t('Who do you want to say Description block to?'),
             '#default_value' => $this->configuration['body']
         ];
@@ -99,9 +105,19 @@ class CustomBlock extends BlockBase
             '#upload_location' => 'public://custom-image-block/',
             '#upload_validators' => array(
                 'file_validate_extensions' => array('gif png jpg jpeg'),
+                'file_validate_size' => array(25600000),
             ),
             '#default_value' => $this->configuration['image']
         );
+        $form['block_link'] = array(
+            '#type' => 'url',
+            '#title' => t('Type card link. Example: /erp_cloud'),
+            '#size' => 60,
+            '#default_value' => $this->configuration['link'],
+        );
+
+
+
 
 
         return $form;
@@ -114,7 +130,8 @@ class CustomBlock extends BlockBase
             'body' => 'description block',
             'image' => '',
             'position' => 1,
-            'color' => '#000000'
+            'color' => '#000000',
+            'link' => ''
         ];
 
     }
@@ -126,6 +143,7 @@ class CustomBlock extends BlockBase
         $this->configuration['image'] = $form_state->getValue('block_image');
         $this->configuration['position'] = $form_state->getValue('position_title');
         $this->configuration['color'] = $form_state->getValue('color_title');
+        $this->configuration['link'] = $form_state->getValue('block_link');
     }
 
 }

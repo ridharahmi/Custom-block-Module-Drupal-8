@@ -1,13 +1,20 @@
 <section id="custom_block">
+
     {% if title_block %}
         <h2 style="color: {{ color_title }}; text-align: {{ position_title }};"> {{ title_block }}</h2>
     {% endif %}
 
     {% if image_block %}
-        <img src="{{ image_block }}" alt="{{ 'Custom Image'|t }}" title="{{ 'Custom Image'|t }}" class="img-responsive" />
+        <img src="{{ image_block }}" alt="{{ 'Custom Image'|t }}" title="{{ 'Custom Image'|t }}"
+             class="img-responsive"/>
     {% endif %}
 
     {% if body_block %}
         <p>{{ body_block }}</p>
     {% endif %}
+
+    {% if link_block %}
+        <a href="{{ link_block }}" target="_blank"> {{ 'Savoir Plus'|t }}</a>
+    {% endif %}
+
 </section>

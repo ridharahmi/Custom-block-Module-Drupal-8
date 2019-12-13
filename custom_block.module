@@ -13,7 +13,8 @@ function custom_block_theme($existing, $type, $theme, $path)
                 'body_block' => NULL,
                 'image_block' => null,
                 'position_title' => null,
-                'color_title' => null
+                'color_title' => null,
+                'link_block' => null
             ),
             'template' => 'customblock',
         ),
