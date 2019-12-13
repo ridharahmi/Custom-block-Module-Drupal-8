@@ -5,7 +5,7 @@ namespace Drupal\custom_block\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Entity\File;
-use Drupal\core\Url;
+
 
 /**
  * Provides a 'Hello' Block.
@@ -25,6 +25,8 @@ class CustomBlock extends BlockBase
     public function build()
     {
         $config = $this->getConfiguration();
+
+        // url custom image block
         $fid = $config['image'];
         if (!empty($fid)) {
             $file = File::load($fid[0]);
@@ -33,13 +35,23 @@ class CustomBlock extends BlockBase
             $url = $file->url();
         }
 
+        // position custom title block
+        if ($config['position'] == 1) {
+            $text_align = 'left';
+        } elseif ($config['position'] == 2) {
+            $text_align = 'center';
+        } else {
+            $text_align = 'right';
+        }
+
 
         return array(
             '#theme' => 'customblock',
             '#title_block' => $config['title'],
             '#body_block' => $config['body'],
-            '#position_title' => $config['position'],
+            '#position_title' => $text_align,
             '#image_block' => $url,
+            '#color_title' => $config['color']
         );
 
     }
@@ -66,6 +78,12 @@ class CustomBlock extends BlockBase
                 3 => $this->t('Right'),
             ),
             '#default_value' => $this->configuration['position'],
+        );
+        $form['color_title'] = array(
+            '#type' => 'color',
+            '#title' => $this->t('Color Title'),
+            '#description' => $this->t('Color Title Custom Block default #000000'),
+            '#default_value' => $this->configuration['color'],
         );
 
         $form['block_body'] = [
@@ -95,7 +113,8 @@ class CustomBlock extends BlockBase
             'title' => 'Title',
             'body' => 'description block',
             'image' => '',
-            'position' => 1
+            'position' => 1,
+            'color' => '#000000'
         ];
 
     }
@@ -106,6 +125,7 @@ class CustomBlock extends BlockBase
         $this->configuration['body'] = $form_state->getValue('block_body');
         $this->configuration['image'] = $form_state->getValue('block_image');
         $this->configuration['position'] = $form_state->getValue('position_title');
+        $this->configuration['color'] = $form_state->getValue('color_title');
     }
 
 }
