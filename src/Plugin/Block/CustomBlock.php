@@ -4,9 +4,7 @@ namespace Drupal\custom_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Druap\image\Entity\ImageStyle;
 use Drupal\file\Entity\File;
-use Drupal\Core\Url;
 
 
 
@@ -56,7 +54,8 @@ class CustomBlock extends BlockBase
             '#position_title' => $text_align,
             '#image_block' => $url,
             '#color_title' => $config['color'],
-            '#link_block' => $config['link']
+            '#link_block' => $config['link'],
+            '#description' => $config['description']['value']
         );
 
     }
@@ -94,10 +93,19 @@ class CustomBlock extends BlockBase
         $form['block_body'] = [
             '#type' => 'textarea',
             '#title' => $this->t('Custom Body'),
-            '#format' => 'full_html',
             '#description' => $this->t('Who do you want to say Description block to?'),
             '#default_value' => $this->configuration['body']
         ];
+
+        $form['block_text'] = [
+            '#type' => 'text_format',
+            '#title' => $this->t('Custom description'),
+            '#format' => 'full_html',
+            '#description' => $this->t('Who do you want to say Description block to?'),
+            '#rows' => 50,
+            '#default_value' => $this->configuration['description']['value']
+        ];
+
         $form['block_image'] = array(
             '#title' => t('Custom Image'),
             '#description' => $this->t('Chossir Image gif png jpg jpeg'),
@@ -105,7 +113,6 @@ class CustomBlock extends BlockBase
             '#upload_location' => 'public://custom-image-block/',
             '#upload_validators' => array(
                 'file_validate_extensions' => array('gif png jpg jpeg'),
-                'file_validate_size' => array(25600000),
             ),
             '#default_value' => $this->configuration['image']
         );
@@ -131,7 +138,8 @@ class CustomBlock extends BlockBase
             'image' => '',
             'position' => 1,
             'color' => '#000000',
-            'link' => ''
+            'link' => '',
+            'description'=> ''
         ];
 
     }
@@ -144,6 +152,7 @@ class CustomBlock extends BlockBase
         $this->configuration['position'] = $form_state->getValue('position_title');
         $this->configuration['color'] = $form_state->getValue('color_title');
         $this->configuration['link'] = $form_state->getValue('block_link');
+        $this->configuration['description'] = $form_state->getValue('block_text');
     }
 
 }

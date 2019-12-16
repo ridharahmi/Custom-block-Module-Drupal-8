@@ -14,7 +14,8 @@ function custom_block_theme($existing, $type, $theme, $path)
                 'image_block' => null,
                 'position_title' => null,
                 'color_title' => null,
-                'link_block' => null
+                'link_block' => null,
+                'description' => null
             ),
             'template' => 'customblock',
         ),
